@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-08-25T11:47:19+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Sponge Note</title><subtitle>기록하고 활용하자.</subtitle><author><name>Hyse</name><email>aa3324296@naver.com</email></author><entry><title type="html">Test11</title><link href="http://localhost:4000/studyjpabasic/test/" rel="alternate" type="text/html" title="Test11" /><published>2022-08-25T00:00:00+09:00</published><updated>2022-08-25T00:00:00+09:00</updated><id>http://localhost:4000/studyjpabasic/test</id><content type="html" xml:base="http://localhost:4000/studyjpabasic/test/"><![CDATA[<p>Testw</p>]]></content><author><name>Hyse</name><email>aa3324296@naver.com</email></author><category term="StudyJPAbasic" /><summary type="html"><![CDATA[Testw]]></summary></entry><entry><title type="html">JPA-Application</title><link href="http://localhost:4000/studyjpa-application/JPAapplication/" rel="alternate" type="text/html" title="JPA-Application" /><published>2022-08-23T00:00:00+09:00</published><updated>2022-08-23T00:00:00+09:00</updated><id>http://localhost:4000/studyjpa-application/JPAapplication</id><content type="html" xml:base="http://localhost:4000/studyjpa-application/JPAapplication/"><![CDATA[<p>JPA-Application Test</p>]]></content><author><name>Hyse</name><email>aa3324296@naver.com</email></author><category term="StudyJPA-Application" /><summary type="html"><![CDATA[JPA-Application Test]]></summary></entry><entry><title type="html">JPA 소개</title><link href="http://localhost:4000/studyjpabasic/JPA%EC%86%8C%EA%B0%9C/" rel="alternate" type="text/html" title="JPA 소개" /><published>2022-08-23T00:00:00+09:00</published><updated>2022-08-23T00:00:00+09:00</updated><id>http://localhost:4000/studyjpabasic/JPA%EC%86%8C%EA%B0%9C</id><content type="html" xml:base="http://localhost:4000/studyjpabasic/JPA%EC%86%8C%EA%B0%9C/"><![CDATA[<p>#JPA란?</p>
+
+<p>Java Persistence API
+자바 진영의 ORM 기술 표준</p>
+
+<p>ORM이란??</p>
+
+<p>Object-relational mapping(객체 관계 매핑)
+ 객체는 객체대로 설계
+ 관계형 데이터베이스는 관계형 데이터베이스대로 설계
+ ORM 프레임워크가 중간에서 매핑</p>
+
+<p>JPA는 애플리케이션과 JDBC 사이에서 동작</p>
+
+<p><img src="./images/2022-08-23-JPA소개/jpa1.png" alt="jpa1" /></p>
+
+<p>JPA 동작 - 저장</p>
+
+<p>../_posts/images/2022-08-23-JPA소개/jpa2.png</p>
+
+<p>JPA 조회
+/Users/hyeonseung/Hyse16.github.io/_posts/images/2022-08-23-JPA소개/jpa3.png</p>
+
+<p>#JPA 사용 이유</p>
+<ul>
+  <li>SQL 중심적인 개발에서 객체 중심으로 개발</li>
+  <li>생산성</li>
+  <li>유지보수</li>
+  <li>패러다임의 불일치 해결</li>
+  <li>성능</li>
+  <li>데이터 접근 추상화와 벤더 독립성</li>
+  <li>표준</li>
+</ul>
+
+<p>##생산성 - JPA와 CRUD</p>
+
+<p>저장 : jpa.persist(member)
+조회 : Member member = jpa.find(memberId)
+수정 : member.setName(“변경할 이름”)
+삭제 : jpa.remove(member)</p>
+
+<p>##유지보수 - JPA : 필드만 추가하면 됨, SQL은 JPA가 처리</p>
+
+<p>##JPA와 패러다임의 불일치 해결</p>
+<ol>
+  <li>JPA와 상속</li>
+  <li>JPA와 연관관계</li>
+  <li>JPA와 객체 그래프 탐색</li>
+  <li>JPA와 비교하기</li>
+</ol>
+
+<p>#JPA의 성능 최적화 기능</p>
+
+<p>##1. 1차 캐시와 동일성 보장
+     - 같은 트랜잭션 안에서는 같은 엔티티를 반환 - 조회 성능 향상
+     - DB Isolation Leveldl Read Commit이어도 애플리케이션 Repeatable Read 보장</p>
+
+<p>##2. 트랜잭션을 지원하는 쓰기지연
+     - 트랜잭션을 커밋할 때까지 INSERT SQL을 모음
+     - JDBC BATCH SQL 기능을 사용해서 한번에 SQL 전송</p>
+
+<p>##3. 지연 로딩
+     - 지연 로딩 : 객체가 실제 사용될 때 로딩
+     - 즉시 로딩 : JOIN SQL로 한번에 연관된 객체까지 미리 조회</p>]]></content><author><name>Hyse</name><email>aa3324296@naver.com</email></author><category term="StudyJPAbasic" /><summary type="html"><![CDATA[#JPA란?]]></summary></entry><entry><title type="html">Test</title><link href="http://localhost:4000/portfolio/PortFolio/" rel="alternate" type="text/html" title="Test" /><published>2022-08-23T00:00:00+09:00</published><updated>2022-08-23T00:00:00+09:00</updated><id>http://localhost:4000/portfolio/PortFolio</id><content type="html" xml:base="http://localhost:4000/portfolio/PortFolio/"><![CDATA[<p>Test</p>]]></content><author><name>Hyse</name><email>aa3324296@naver.com</email></author><category term="PortFolio" /><summary type="html"><![CDATA[Test]]></summary></entry><entry><title type="html">Introduce</title><link href="http://localhost:4000/about/first/" rel="alternate" type="text/html" title="Introduce" /><published>2022-08-22T00:00:00+09:00</published><updated>2022-08-22T00:00:00+09:00</updated><id>http://localhost:4000/about/first</id><content type="html" xml:base="http://localhost:4000/about/first/"><![CDATA[<p><img src="../../images/2022-08-22-first/Me.jpg" alt="Me" /></p>
+
+<p>자바 백엔드 개발자가 되기위한 공부노트</p>
+
+<p>#SpringBoot # JPA # Querydsl</p>]]></content><author><name>Hyse</name><email>aa3324296@naver.com</email></author><category term="About" /><summary type="html"><![CDATA[]]></summary></entry></feed>
