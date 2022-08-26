@@ -45,7 +45,7 @@ sidebar:
 ### @Table
 - @Table은 엔티티와 매핑할 테이블 지정
   
-![8](../../images/2022-08-25-EntityMapping/8.png)
+![8](/images/2022-08-26-EntityMapping/8.png)
 
 <br>
 
@@ -61,7 +61,8 @@ sidebar:
 
 
 ### 데이터베이스 스키마 자동 생성 - 속성
-![11](../../images/2022-08-25-EntityMapping/11.png)
+
+![11](/images/2022-08-26-EntityMapping/11.png)
 
 
 <br>
