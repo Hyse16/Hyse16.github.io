@@ -34,7 +34,7 @@ sidebar:
 <br>
 
 ## 조인 전략
-![7](/images/2022-08-29-inheritanceMapping/7.png)
+![7](/images/2022-08-28-inheritanceMapping/7.png)
 
 ### 장점
 - 테이블 정구화
@@ -49,7 +49,7 @@ sidebar:
 <br>
 
 ## 단일 테이블 전략
-![9](/images/2022-08-29-inheritanceMapping/9.png)
+![9](/images/2022-08-28-inheritanceMapping/9.png)
 
 ### 장점
 - 조인이 필요 없으므로 일반적으로 조회 성능이 빠름
@@ -62,7 +62,7 @@ sidebar:
 <br>
 
 ## 구현 클래스마다 테이블 전략
-![11](/images/2022-08-29-inheritanceMapping/11.png)
+![11](/images/2022-08-28-inheritanceMapping/11.png)
 
 ### 장점
 - 서브 타입을 명확하게 구분해서 처리할 때 효과적
@@ -75,7 +75,7 @@ sidebar:
 <br>
 
 # MappedSuperclass
-![14](/images/2022-08-29-inheritanceMapping/14.png)
+![14](/images/2022-08-28-inheritanceMapping/14.png)
 
 - 상속관계 매핑X
 - 엔티티X, 테이블과 매핑X
