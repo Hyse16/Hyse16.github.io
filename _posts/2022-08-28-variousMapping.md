@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "다양한 연관관계 매핑"
+title: "고급 매핑"
 categories: StudyJPAbasic
 toc: true
 author_profile: true
