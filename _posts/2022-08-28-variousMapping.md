@@ -2,7 +2,7 @@
 layout: single
 title: "고급 매핑"
 categories: StudyJPAbasic
-toc: true
+toc: true 
 author_profile: true
 sidebar:
     nav: "docs"
@@ -16,6 +16,7 @@ sidebar:
 <br>
 
 ## 다중성
+
 ### 다대일[N:1] : @ManyToOne
 
 <br>
