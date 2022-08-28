@@ -1,8 +1,8 @@
 ---
 layout: single
-title: "고급 매핑"
+title: "고급 매핑 "
 categories: StudyJPAbasic
-toc: true
+toc: true 
 author_profile: true
 sidebar:
     nav: "docs"
