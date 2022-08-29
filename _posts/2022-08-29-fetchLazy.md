@@ -19,8 +19,6 @@ em.find() vs em.getReference()
 
 ## 프록시 특징
   
-  
-<br>
 
   실제 클래스를 상속 받아서 만들어짐
   
@@ -90,7 +88,10 @@ em.find() vs em.getReference()
 # 영속성 전이 : CASCADE
 특정 엔티티를 영속 상태를 만들 때 연관된 엔티티도 함께 영속상태로 만들고 싶을 때
 ex) 부모 엔티티를 저장할 때 자식 엔티티도 함께 저장
-29
+
+<br>
+
+![29](/images/2022-08-29-fetchLazy/29.png)
 
 <br>
 
