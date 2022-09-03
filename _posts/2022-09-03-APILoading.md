@@ -10,8 +10,6 @@ sidebar:
 # 지연 로딩과 조회 성능 최적화
 주문 + 배송정보 + 회원을 조회하는 API
 
-<br>
-
 ## 엔티티를 직접 노출
 ````java
 
@@ -32,7 +30,9 @@ public class OrderSimpleApiController{
         return all;
     }
 }
-/* 주의 : 엔티티를 직접 노출할 때는 양방향 연관관계가 걸린 곳은 꼭 @JsonIgnore를 사용해야한다. 안그러면 무한 루프가 걸린다.*/
+/* 주의 : 엔티티를 직접 노출할 때는 양방향 연관관계가 걸린 곳은 꼭 
+
+@JsonIgnore를 사용해야한다. 안그러면 무한 루프가 걸린다.*/
 ````
 
 <br>
@@ -74,7 +74,8 @@ static class SimpleOrderDto{
 ````java
 @GetMapping("/api/v3/simple-orders")
 public List<SimpleOrderDto> ordersV3(){
-    List<Order> orders = orderRepository.findAllwithMemberDelivery();
+    List<Order> orders = 
+    orderRepository.findAllwithMemberDelivery();
     List<SimpleOrderDto> result = orders.stream()
     .map(o-> new SimpleOrderDto(o))
     .collect(ToList());
