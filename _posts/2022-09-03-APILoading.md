@@ -134,14 +134,16 @@ public class OrderSimpleQueryDto {
     private LocalDateTime orderDate; 
     private OrderStatus orderStatus;
     private Address address;
-      public OrderSimpleQueryDto(
+
+
+    public OrderSimpleQueryDto(
         Long orderId, String name, LocalDateTime
         orderDate, OrderStatus orderStatus, Address address) {
-          this.orderId = orderId;
-          this.name = name;
-          this.orderDate = orderDate;
-          this.orderStatus = orderStatus;
-          this.address = address;
+        this.orderId = orderId;
+        this.name = name;
+        this.orderDate = orderDate;
+        this.orderStatus = orderStatus;
+        this.address = address;
 } }
 /* Select 절에서 원하는 데이터를 직접 선택하므로 용량 최적화, 리포지토리 재사용성 떨어짐, API스펙에 맞춘 코드가 리포지토리에 들어가는 단점*/
 ````

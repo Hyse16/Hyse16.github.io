@@ -1,0 +1,86 @@
+---
+layout: single
+title: "컬렉션 조회 최적화"
+categories: StudyJPA-Application
+toc: true
+author_profile: true
+sidebar:
+    nav: "docs"
+---
+
+# 주문조회 V1: 엔티티 직접 노출
+````java
+@RestController
+@RequiredArgsConstructor
+public class OrderApicontroller{
+
+    private final OrderRepository orderRepository;
+
+    @GetMapping("api/v1/orders")
+    public List<Order> ordersV1(){
+        List<Order>all = orderRepository.findAll();
+        for (Order order : all) {
+            order.getMember().getNAme();
+            order.getDelivery().getAddress();
+            List<OrderItme> orderItems = order.getOrderItems();
+            orderItems.stream()
+            .forEach(o-> o.getItem().getName());
+        }
+        return all;
+    }
+}
+
+/* 양방향 연관관계면 무한 루프에 걸리지 않게 한곳에 @JsonIgnore를 추가해야 한다.
+
+엔티티를 직접 노출하므로 좋은 방법은 아니다. */
+````
+
+<br>
+
+# 주문 조회V2 : 엔티티를 DTO로 변환
+````java
+@GetMapping("/api/v2/orders")
+public List<OrderDto> ordersV2(){
+    List<Order> orders = orderRepository.findAll();
+    List<OrderDto> result = orders.stream()
+    .map(o-> new OrderDto(o))
+    .collect(toList());
+
+    return result;
+}
+
+//OrderApiController에 추가//
+@Data
+static class OrderDto {
+    private Long orderId;
+    private String name;
+    private LocalDateTime orderDate;
+    private OrderStatus orderStatus;
+    private Address address;
+    private List<OrderItemDto> orderItems;
+
+    public OrderDto(Order order){
+        orderId = order.getId();
+        name = order.getMember().getName();
+        orderDate = order.getOrderDate();
+        orderStatus = order.getStatus;
+        address = order.getDelivery().getAddress();
+        orderItems = order.getOrderItems().steam()
+        .map(orderItem -> new OrderItemDto(orderItem))
+        .collect(toList());
+    }
+}
+
+@Data
+static class OrderItemDto{
+    private String itemName;
+    private int orderPrice;
+    private int count;
+
+    public OrderItemDto(OrderItem orderItem){
+        itemName = orderItem.getItem().getName();
+        orderPrice = orderItem.getOderPrice();
+        count = orderItem.getCount();
+    }
+}
+// 지연 로딩으로 너무 많은 SQL실행//
