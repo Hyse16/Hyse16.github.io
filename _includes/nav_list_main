@@ -49,7 +49,7 @@
             
             {% for category in site.categories %}
                 {% if category[0] == "SpringData" %}
-                    <li><a href="/categories/SpringData" class=""> SpringDataJPA({{category[1].size}})</a></li>
+                    <li><a href="/categories/SpringData" class="">SpringDataJPA({{category[1].size}})</a></li>
                  {% endif %}
             {% endfor %}
              </ul>
