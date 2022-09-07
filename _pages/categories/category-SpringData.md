@@ -1,7 +1,7 @@
 ---
-title: "SpringData"
+title: "SpringDataJPA"
 layout: archive
-permalink: /categories/SpringData
+permalink: /categories/SpringDataJPA
 author_profile: true
 sidebar_main: true
 ---
