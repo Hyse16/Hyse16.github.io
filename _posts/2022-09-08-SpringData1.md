@@ -108,6 +108,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 # 예제 도메인 모델과 동작확인
 ````java
+
 //Member 엔티티//
 
 @Entity
