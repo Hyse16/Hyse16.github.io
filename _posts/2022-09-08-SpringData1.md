@@ -103,6 +103,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     //JPA 엔티티 동일성보장
 }
 ````
+<br>
 
 # 예제 도메인 모델과 동작확인
 ````java
