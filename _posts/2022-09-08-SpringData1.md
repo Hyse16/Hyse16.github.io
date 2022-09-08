@@ -100,8 +100,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             Assertions.assertThat(findMember.getUsername())
             .isEqualTo(member.getUsername())
             Assertions.assertThat(findMember).isEqualTo(member); 
-    //JPA 엔티티 동일성보장
+            //JPA 엔티티 동일성보장
 }
+
 ````
 
 <br>
