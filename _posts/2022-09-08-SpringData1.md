@@ -71,7 +71,9 @@ public class MemberJpaRepositoryTest {
 <br>
 
 # 스프링 데이터 JPA 리포지토리
+
 ````java
+
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
 }
@@ -108,10 +110,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 <br>
 
 # 예제 도메인 모델과 동작확인
+
 ````java
 
 //Member 엔티티//
-
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -210,3 +212,4 @@ public class MemberTest {
         } 
     }
 }
+````
