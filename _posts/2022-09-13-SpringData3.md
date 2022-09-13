@@ -13,6 +13,7 @@ sidebar:
 - 메소드 이름으로 JPA NamedQuery 호출
 - @Query 어노테이션을 사용해서 리파지토리 인터페이스에 쿼리 직접 정의
 
+<br>
 
 # 메소드 이름으로 쿼리 생성
 
@@ -23,7 +24,8 @@ sidebar:
 public List<Member>
 findByUsernameAndAgeGreaterThan
 (String username, int age){
-    return em.createQuery("select m from Member m where m.username = :username and m.age > :age")
+    return em.createQuery("select m from Member m where 
+    m.username = :username and m.age > :age")
         .setParameter("username",username)
         .setParameter("age",age)
         .getResultList();
@@ -76,7 +78,9 @@ public interface MemberRepository
 public class MemberRepository{
     public List<Member> findByUsername(String username){
         ...
-        List<Member> resultList = em.createNamedQuery("Member.findByUsername",Member.class)
+        List<Member> resultList = 
+        em.createNamedQuery
+        ("Member.findByUsername",Member.class)
         .setParameter("username",username)
         .getresultList();
     }
@@ -92,7 +96,8 @@ findByUsername(@Param("username") String username);
 
 public interface MemberRepository 
 extends JpaRepository<Member, Long>{
-    List<Member> findByUsername(@Param("username") String useranme);
+    List<Member> findByUsername
+    (@Param("username") String useranme);
 }
 ````
 
@@ -103,7 +108,8 @@ extends JpaRepository<Member, Long>{
 public interface MemberRepository 
 extends JpaRepository<Member, Long>{
     
-    @Query("select m from Member m where m.useranme =:useranme and m.age = :age")
+    @Query("select m from Member m where
+     m.useranme =:username and m.age = :age")
     List<Member> findUser
     (@Param("username") String username, 
     @Param("age") int age);
@@ -126,8 +132,7 @@ List<String> findUsernameList();
 List<MemberDto> findMemberDto();
 
 //DTO생성//
-package study.datajpa.repository;
-  import lombok.Data;
+
   @Data
   public class MemberDto {
 
