@@ -190,3 +190,275 @@ Optional<Member> findByUsername(String name); //단건 Optional
 단건 조회
 - 결과 없음: null 반환
 - 결과가 2건 이상: javax.persistence.NonUniqueResultException 예외 발생
+
+<br>
+
+# 순수 JPA페이징과 정렬
+
+- 검색조건 : 나이가 10살
+- 정렬조건 : 이름으로 내림차순
+- 페이징조건 : 첫 번째 페이지, 페이지당 보여줄 데이터는 3건
+
+````java
+//JPA 페이징리포지토리 코드//
+public List<Member> findByPage
+(int age, int offset, int limit){
+    return em.createQuery
+    ("select m from Member m where m.age = :age 
+    order by m.username desc")
+        .setParameter("age",age)
+        .setFirstResult(offset)
+        .setMaxResult(limit)
+        .getResultList();
+}
+
+public long totalCount(int age){
+    return em.createQuery
+    ("select count(m) from Member m 
+    where m.age = :age", Long.class)
+        .setParameter("age",age)
+        .getSingleResult();
+}
+
+//JPA 페이징 테스트 코드//
+
+@Test
+public void paging() throws Exception{
+    memberJpaRepository.save
+    (new Member("member1",10));
+    memberJpaRepository.save
+    (new Member("member2",10));
+    memberJpaRepository.save
+    (new Member("member3",10));
+    memberJpaRepository.save
+    (new Member("member4",10));
+    memberJpaRepository.save
+    (new Member("member5",10));
+
+    int age = 10;
+    int offset = 0;
+    int limit = 3;
+
+    List<Member> members = 
+    memberJpaRepository.findByPage
+    (age, offset, limit);
+    long totalCount = 
+    memberJpaRepository.totalCount(age);
+
+    assertThat(members.size()).isEqualTo(3);
+    assertThat(totalCount).isEqualTo(5);
+}
+````
+
+<br>
+
+# 스프링 데이터JPA페이징과 정렬
+````java
+//Page 사용 예제 정의 코드//
+public interface MemberRepository extends
+ Repository<Member, Long>{
+    Page<Member> findByAge(int age, Pageable pageable);
+}
+
+//Page 사용 예제 실행 코드//
+
+@Test
+public void page() throws Exception{
+    memberRepository.save
+    (new Member("member1",10));
+    memberRepository.save
+    (new Member("member2",10));
+    memberRepository.save
+    (new Member("member3",10));
+    memberRepository.save
+    (new Member("member4",10));
+    memberRepository.save
+    (new Member("member5",10));
+
+    PageRequeset pageRequest = 
+    PageRequest.of
+    (0,3, Sort.by(Sort.Direction.DESC,"username"));
+
+    Page<Member> page =
+     memberRepository.findByAge(10, pageRequest);
+
+    List<Member> content = page.getContent();
+    assertThat(content.size()).isEqualTo(3);
+    assertThat(page.getTotalElements()).isEqualTo(5); 
+    assertThat(page.getNumber()).isEqualTo(0); 
+    assertThat(page.getTotalPages()).isEqualTo(2);  
+    assertThat(page.isFirst()).isTrue(); 
+    assertThat(page.hasNext()).isTrue();
+}
+
+//주의할 점//
+//Page는 0부터 시작이다//
+
+//페이지를 유지하면서 엔티티를 DTO로 변환하기//
+Page<Member> page = memberRepository.findByAge(10, pageRequest);
+Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
+````
+
+<br>
+
+# 벌크성 수정 쿼리
+
+````java
+//JPA를 사용한 벌크성 수정 쿼리//
+public int bulkAgePlus(int age){
+    int resultCount = em.createQuery{
+        "update Member m set m.age = m.age +1"+
+        "where m.age >= :age")
+        .setParameter("age",age)
+        .executeUpdate();
+        return resultCount;
+    }
+}
+
+//JPA를 사용한 벌크성 수정 쿼리 테스트//
+@Test
+  public void bulkUpdate() throws Exception {
+
+      memberJpaRepository.save
+      (new Member("member1", 10));
+      memberJpaRepository.save
+      (new Member("member2", 19));
+      memberJpaRepository.save
+      (new Member("member3", 20));
+      memberJpaRepository.save
+      (new Member("member4", 21));
+      memberJpaRepository.save
+      (new Member("member5", 40));
+
+      int resultCount = 
+      memberJpaRepository.bulkAgePlus(20);
+
+      assertThat(resultCount).isEqualTo(3);
+  }
+````
+
+<br>
+
+````java
+//스프링 데이터 JPA를 사용한 벌크성 수정 쿼리//
+@Modifying
+@Query("update Member m set m.age = m.age+1 
+where m.age >=: age")
+int bulkAgePlus(@Param("age") int age);
+
+//스프링 데이터 JPA를 사용한 벌크성 수정 쿼리 테스트//
+@Test
+  public void bulkUpdate() throws Exception {
+//given
+      memberRepository.save
+      (new Member("member1", 10));
+      memberRepository.save
+      (new Member("member2", 19));
+      memberRepository.save
+      (new Member("member3", 20));
+      memberRepository.save
+      (new Member("member4", 21));
+      memberRepository.save
+      (new Member("member5", 40));
+      
+      int resultCount = 
+      memberRepository.bulkAgePlus(20);
+
+      assertThat(resultCount).isEqualTo(3);
+    }
+//벌크성 수정,삭제 쿼리는 @Modifying 어노테이션 사용//
+// 사용하지 않으면 예외발생//
+/*벌크성 쿼리를 실행하고 나서 영속성 컨텍스트 초기화:
+ @Modifying(clearAutomatically = true)*/
+````
+
+<br>
+
+# EntityGraph
+연관된 엔티티들을 SQL 한번에 조회하는 방법
+
+````java
+@Test
+public void findMemberLazy() throws Exception{
+      Team teamA = new Team("teamA");
+      Team teamB = new Team("teamB");
+      teamRepository.save(teamA);
+      teamRepository.save(teamB);
+      memberRepository.save
+      (new Member("member1", 10, teamA));
+      memberRepository.save
+      (new Member("member2", 20, teamB));
+
+      em.flush();
+      em.clear();
+
+      List<Member> members = 
+      memberRepository.findAll();
+
+      for (Member member : members) {
+          member.getTeam().getName();
+} 
+}
+````
+
+<br>
+
+````java
+//JPQL 페치 조인//
+@Query("select m from Member m 
+left join fetch m.team")
+List<Member> findMemberFetchJoin();
+
+//EntityGraph 사용//
+//공통 메서드 오버라이드//
+@Override
+@EntityGraph(attributePaths = {"team"})
+List<Member> findAll();
+
+//JPQL + 엔티티 그래프
+@EntityGraph(attributePaths = {"team"})
+@Query("select m from Member m")
+List<Member> findMemberEntityGraph();
+
+//메서드 이름으로 쿼리에서 특히 편리하다.//
+@EntityGraph(attributePaths={"team"})
+List<Member> findByUsername(String username)
+````
+정리
+- 페치조인의 간편 버전
+- LEFT OUTER JOIN 사용
+
+<br>
+
+# JPA HINT
+
+````java
+//쿼리 힌트 사용//
+@QueryHints(value = @QueryHint
+(name = "org.hibernate.readOnly", value = "true"))
+Member findReadOnlyByUsername(String username);
+
+//쿼리 힌트 사용 확인//
+@Test
+  public void queryHint() throws Exception {
+
+      memberRepository.save(new Member("member1", 10));
+      em.flush();
+      em.clear();
+
+      Member member = 
+      memberRepository.findReadOnlyByUsername("member1");
+      member.setUsername("member2");
+
+    em.flush(); 
+}
+
+//쿼리 힌트 Page 추가 예제//
+@QueryHints(value = { 
+@QueryHint(name = "org.hibernate.readOnly",
+               value = "true")},
+   forCounting = true)
+
+    Page<Member> findByUsername
+    (String name, Pagable pageable);
+
