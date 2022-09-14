@@ -462,3 +462,4 @@ Member findReadOnlyByUsername(String username);
     Page<Member> findByUsername
     (String name, Pagable pageable);
 
+````
