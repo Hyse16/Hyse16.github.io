@@ -154,7 +154,7 @@ public void JpaEventBaseEntity() throws Exception {
  등록자, 수정자는 없을 수도 있다.
  그래서 다음과 같이 Base 타입을 분리하고, 
  원하는 타입을 선택해서 상속한다.*/
- 
+
 public class BaseTimeEntity {
         @CreatedDate
         @Column(updatable = false)
@@ -170,3 +170,4 @@ public class BaseTimeEntity {
         @LastModifiedBy
         private String lastModifiedBy;
   }
+````
