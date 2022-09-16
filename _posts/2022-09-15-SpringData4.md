@@ -282,3 +282,4 @@ public Page<MemberDto> list
       return memberRepository.findAll
       (pageable).map(MemberDto::new);
   }
+````
