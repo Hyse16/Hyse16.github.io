@@ -171,3 +171,114 @@ public class BaseTimeEntity {
         private String lastModifiedBy;
   }
 ````
+
+<br>
+
+# Web 확장 - 도메인 클래스 컨버터
+
+````java
+//도메인 클래 컨버터 사용 전//
+@RestController
+@RequiredArgsConstructor
+public class MemberController {
+
+      private final MemberRepository memberRepository;
+      @GetMapping("/members/{id}")
+      public String findMember
+      (@PathVariable("id") Long id) {
+          Member member =
+           memberRepository.findById(id).get();
+          return member.getUsername();
+      }
+}
+
+//도메인 클래스 컨버터 사용 후//
+@RestController
+@RequiredArgsConstructor
+public class MemberController {
+
+      private final MemberRepository memberRepository;
+      @GetMapping("/members/{id}")
+      public String findMember
+      (@PathVariable("id") Member member) {
+          return member.getUsername();
+      }
+}
+
+````
+
+<br>
+
+# Web 확장 - 페이징과 정렬
+
+````java
+//페이징과 정렬 예제//
+@GetMapping("/members")
+public Page<Member> list(Pageable pageable) {
+        Page<Member> page = 
+        memberRepository.findAll(pageable);
+        return page;
+    }
+ 
+//기본값, 글로벌 설정 : 스프링 부트//
+
+//# 기본 페이지 사이즈//
+spring.data.web.pageable.default-page-size=20 
+
+///# 최대 페이지 사이즈//
+spring.data.web.pageable.max-page-size=2000 
+
+//개별설정//
+@RequestMapping(value = "/members_page", method = RequestMethod.GET)
+  public String list(@PageableDefault
+  (size = 12, sort = “username”,
+direction = Sort.Direction.DESC) Pageable pageable) {
+  ...
+}
+
+//접두사//
+//페이징 정보가 둘 이상이면 접두사로 구분//
+public String list(
+      @Qualifier("member") Pageable memberPageable,
+      @Qualifier("order") Pageable orderPageable, ...
+
+````
+
+<br>
+
+## Page 내용을 DTO로 변환하기
+엔티티를 API로 노출하면 다양한 문제가 발생한다. 
+
+그래서 엔티티를 꼭 DTO로 변환해서 반환해야 한다.
+
+Page는 map() 을 지원해서 내부 데이터를 다른 것으로 변경할 수 있다.
+
+````java
+//MemberDTO//
+@Data
+  public class MemberDto {
+      private Long id;
+      private String username;
+      public MemberDto(Member m) {
+          this.id = m.getId();
+          this.username = m.getUsername();
+      }
+  }
+
+//Page.Map()사용//
+@GetMapping("/members")
+public Page<MemberDto> list(Pageable pageable) {
+      Page<Member> page = 
+      memberRepository.findAll(pageable);
+      Page<MemberDto> pageDto = 
+      page.map(MemberDto::new);
+      return pageDto;
+}
+
+//코드 최적화//
+@GetMapping("/members")
+public Page<MemberDto> list
+(Pageable pageable) {
+      return memberRepository.findAll
+      (pageable).map(MemberDto::new);
+  }
