@@ -1,0 +1,36 @@
+---
+layout: single
+title: "백준 알고리즘 1946번"
+categories: Algorithm
+toc: true
+author_profile: true
+sidebar:
+    nav: "docs"
+---
+
+[백준링크](https://www.acmicpc.net/problem/1946)
+
+sys.stdin.readline 쓰는 습관을 기르자!
+
+그리디 알고리즘
+
+# 파이썬
+```python
+import sys
+input = sys.stdin.readline
+
+for _ in range(int(input())):
+    n = int(input())
+    list = [tuple(map(int,input().split())) for _ in range(n)]
+    list.sort()
+    
+    cnt = 1
+    second = list[0][1]
+    for i in range(1,n):
+        if list[i][1] < second:
+            second = list[i][1]
+            cnt+=1
+    print(cnt)
+
+
+```
