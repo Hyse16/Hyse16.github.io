@@ -15,7 +15,12 @@ sidebar:
 <p>
 다이나믹 프로그래밍
 
+<p>
+
+
+
 # 파이썬
+
 ```python
 import sys
 input = sys.stdin.readline
