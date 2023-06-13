@@ -1,0 +1,230 @@
+---
+layout: single
+title: "AWS 게시판 만들기(게시글 추가하기)"
+categories: AWS
+toc: true
+author_profile: true
+sidebar:
+    nav: "docs"
+---
+
+# 헤더와 푸터
+```python
+<h1>헤더입니다</h1>
+<hr>
+```
+
+```python
+<hr>
+<h1>푸터 입니다</h1>
+```
+
+<br>
+
+
+
+# 게시글 리스트 페이지
+```python
+<!DOCTYPE html>
+<html lang ="en" xmlns:th = "http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset = "UTF-8">
+    <title> Title </title>
+</head>
+<body>
+    <div th:insert="common/header.html" id = "header"></div>
+
+    <a th:href="@{/post}">글쓰기</a>
+
+    <div th:insert="common/footer.html" id = "footer"></div>
+
+</body>
+</html>
+```
+
+<br>
+
+
+# 글쓰기 입력 페이지
+```python
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form  action="/post" method="post">
+    제목 : <input type="text" name="title"> <br>
+    작성자 : <input type="text" name="writer"> <br>
+    <textarea name="content"></textarea><br>
+
+    <input type="submit" value="등록">
+</form>
+</body>
+</html>
+```
+
+<br>
+
+
+# 컨트롤러 구현
+```python
+@Controller
+@AllArgsConstructor
+#BoardService 주입
+public class BoardController {
+
+    private BoardService boardService;
+
+    @GetMapping("/")
+    public String list() {
+        return "board/list.html";
+    }
+
+    @GetMapping("/post")
+    public String write() {
+        return "board/write.html";
+    }
+
+    @PostMapping("/post")
+    public String write(BoardDto boardDto) {
+        boardService.savePost(boardDto);
+        return "redirect:/";
+    }
+}
+```
+
+<br>
+
+
+# 서비스 구현
+```python
+@Service
+@AllArgsConstructor
+public class BoardService {
+    private final BoardRepository boardRepository;
+
+    # DB에 저장
+    @Transactional
+    public Long savePost(BoardDto boardDto) {
+        return boardRepository.save(boardDto.toEntity()).getId();
+    }
+}
+```
+
+<br>
+
+
+# 리포지토리 구현
+```python
+# 인터페이스로 구현 후 JPA리포지토리 상속받기(Entity,pk타입 명시)
+public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
+}
+```
+
+<br>
+
+
+# 엔티티 구현
+```python
+@Getter
+@Entity
+@NoArgsConstructor
+@Table(name = "board")
+public class BoardEntity extends TimeEntity{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(length = 10, nullable = false)
+    private String writer;
+
+    @Column(length = 100, nullable = false)
+    private String title;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String content;
+
+    #빌더패턴으로 생성
+    #setter 대신 사용 (안전성 보장)
+    @Builder
+    public BoardEntity(Long id, String writer, String title, String content) {
+        this.id = id;
+        this.writer = writer;
+        this.title = title;
+        this.content = content;
+    }
+}
+```
+
+<br>
+
+
+# 타임 엔티티 구현
+```python
+@Getter
+@MappedSuperclass # 자식 클래스에게 매핑정보 상속
+@EntityListeners(AuditingEntityListener.class)
+# JPA에게 기능 사용 알림
+public abstract class TimeEntity {
+
+    #생성일
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createDate;
+
+    #수정일
+    @LastModifiedDate
+    private LocalDateTime modifiedDate;
+
+    """ 마지막으로 JPA Auditing 활성화를 위해 
+    Application에서 @EnableJpaAuditing 어노테이션을 추가해줍니다"""
+}
+```
+
+<br>
+
+
+# DTO 구현
+```python
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+public class BoardDto {
+
+    """DTO 사용이유
+    중요한 정보를 노출 시키지 않고 원활한 통신 촉진 가능"""
+
+    private Long id;
+    private String writer;
+    private String title;
+    private String content;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
+
+    #DTO 에서 필요한 부분을 엔티티로 변환 메서드
+    public BoardEntity toEntity() {
+        BoardEntity entity = BoardEntity.builder()
+                .id(id)
+                .writer(writer)
+                .title(title)
+                .content(content)
+                .build();
+        return entity;
+    }
+
+    @Builder
+    public BoardDto(Long id, String writer, String title, String content, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+        this.id = id;
+        this.writer = writer;
+        this.title = title;
+        this.content = content;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
+    }
+}
+```
+
