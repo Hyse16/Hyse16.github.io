@@ -1,5 +1,5 @@
 ---
-title: "Algorithm"
+title: "정보처리기사"
 layout: archive
 permalink: /categories/정보처리기사
 author_profile: true
